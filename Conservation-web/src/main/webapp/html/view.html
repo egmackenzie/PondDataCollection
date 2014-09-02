@@ -1,0 +1,23 @@
+<div class="panel panel-default" style="margin-left: 5%; margin-right: 5%">
+  <div class="panel-heading">
+    <h3 class="panel-title">Data</h3>
+  </div>
+    <div class="panel-body">
+        <table class="table-striped">
+          <tr>
+              <th>Survey</th>
+              <th>Site Name</th>
+              <th>Pond ID</th>
+              <th>Details</th>
+          </tr>
+          <tr ng-repeat="datum in data">
+              <td>{{datum.surveyId}}</td>
+              <td>{{datum.siteName}}</td>
+              <td>{{datum.pondId}}</td>
+              <td>
+                  <span class="glyphicon glyphicon-info-sign"></span>
+              </td>
+          </tr>
+      </table>
+  </div>
+</div>

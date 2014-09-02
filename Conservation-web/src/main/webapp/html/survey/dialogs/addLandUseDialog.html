@@ -1,0 +1,30 @@
+<div>
+    <div class="modal-header">
+        <h3>Land Use</h3>
+    </div>
+    <div class="modal-body">
+        <table>
+            <tr>
+                <td>
+                    <label>Use</label>
+                </td>
+                <td>
+                    <select ng-model="selectedUse" ng-options='use for use in landUse'></select>
+                </td>
+            </tr>
+            <tr collapse='selectedUse!=="Other"'>
+                <td>
+                    <label>Other</label>
+                </td>
+                <td>
+                    <input type="text" ng-model="newUse">
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button ng-if="selectedUse === 'Other';" class="btn btn-primary" ng-click="$close(newUse)">Add</button>
+        <button ng-if="selectedUse !== 'Other';" class="btn btn-primary" ng-click="$close(selectedUse)">Add</button>
+        <button class="btn btn-warning" ng-click="$dismiss()">Cancel</button>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15-Aug-2014, 00:02:43
+    Author     : Myrdon
+*/
+
+
+.panel-cons {
+    width: 80%;
+}
+
+table {
+    width: 100%;
+}
+
+td {
+    width: available;
+}
+
+input[type="text"] {
+    width: 80%;
+}
+
+input[type="number"] {
+    width: 5em;
+    margin-right: 10px;
+}
+
+textarea {
+    width: 80%;
+    resize: none;
+}
+
+label {
+    text-indent: 5px;
+}
+
+ol>li {
+    list-style-type: none;
+}
+
+ol {
+    padding-left: 0px;
+    -webkit-padding-start: 0px;
+}
+
+.text-icon {
+    margin-right: 1em;
+}
+
+select {
+    width: 80%;
+}

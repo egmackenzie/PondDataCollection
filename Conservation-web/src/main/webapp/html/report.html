@@ -1,0 +1,43 @@
+
+<div class="panel panel-default" style="margin-left: 5%; margin-right: 5%">
+  <div class="panel-heading">
+    <h3 class="panel-title">Survey</h3>
+  </div>
+    <div class="panel-body" style="width: 100%">
+        <label>Create New Survey</label>
+        <br>
+        <button class="btn btn-primary" style="width: 10em">Create</button>
+        <hr>
+        <button class="btn btn-primary" style="width: 10em">Continue</button>
+        <br>
+        <br>
+        <label>Survey to continue:</label>
+        <select ng-model="selectedSurvey" ng-options="survey.siteName + ': ' + survey.pondCode for survey in surveys"></select>
+  </div>
+</div>
+
+<div class="panel panel-default" style="margin-left: 5%; margin-right: 5%">
+  <div class="panel-heading">
+    <h3 class="panel-title">Water Chemistry</h3>
+  </div>
+    <div class="panel-body" style="width: 100%">
+      <table>
+          <tr>
+              <td>DO</td>
+              <td><input type="number"><label>%</label></td>
+          </tr>
+          <tr>
+              <td>Conductivity</td>
+              <td><input type="number"><label>µ</label></td>
+          </tr>
+          <tr>
+              <td>Temperature</td>
+              <td><input type="number"><label>°C</label></td>
+          </tr>
+          <tr>
+              <td>Turbid</td>
+              <td><input type="checkbox"></td>
+          </tr>
+      </table>
+  </div>
+</div>
