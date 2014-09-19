@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">    
+    <display-name>Conservation - Ponds</display-name>
+    <!--SECURITY ROLE--> 
+    <security-role>
+        <description/>
+        <role-name>ResearcherRole</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>AdminRole</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>ReadOnlyRole</role-name>
+    </security-role>
+    <!--SECURITY CONSTRAINT--> 
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+    
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Conservation-web</web-resource-name>
+            <description/>
+            <url-pattern>/Conservation-web/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ResearcherRole</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    
+    <!--LOGIN CONFIGURATION-->
+    <security-constraint>
+        <display-name>AdminConstraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>Admin</web-resource-name>
+            <description/>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>AdminRole</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>ResearcherConstraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>Researcher</web-resource-name>
+            <description/>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>ResearcherRole</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>ReadOnlyConstraint</display-name>
+        <web-resource-collection>
+            <web-resource-name>ReadOnly</web-resource-name>
+            <description/>
+            <url-pattern>/*</url-pattern>
+            <http-method>GET</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>ReadOnlyRole</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>file</realm-name>
+    </login-config>
+</web-app>
