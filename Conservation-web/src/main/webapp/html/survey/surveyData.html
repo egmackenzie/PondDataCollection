@@ -1,65 +1,126 @@
-<div ng-controller="surveyCtrl">
-    <table class="table table-striped">
-        <tr>
-            <th colspan="2">
-                Site Data
-            </th>
-        </tr>
-        <tr><td>Site Name</td><td><input type="text" ng-model="survey.site.name"></td></tr>
-        <tr><td>Site Code</td><td><input type="text" ng-model="survey.site.code"></td></tr>
-        <tr>
-            <th colspan="2">
-                Pond Data
-            </th>
-        </tr>
-        <tr><td>Pond Code</td><td><input type="text" ng-model="survey.pond.code"></td></tr>
-        <tr><td>Description</td><td><textarea rows="5" maxlength="255" ng-model="survey.pond.description"></textarea></td></tr>
-        <tr><td>Size</td>
-            <td>
-                <input type="number" step="0.1" ng-model="survey.pond.width">
-                <label style="margin-right: 1em">x</label>
-                <input type="number" ng-model="survey.pond.length">
-                <label>meters</label>
-            </td></tr>
-        <tr><td>Marginal Complexity (%)</td><td><input type="number" min="0" max="100" ng-model="survey.pond.marginalComplexity"></td></tr>
-        <tr><td>Has In/Out Flows</td><td><input type="checkbox" ng-model="survey.pond.hasInOutFlows"></td></tr>
-        <tr><td>Land Use 5m</td><td><ol>
-                    <li ng-click="addUsage(5)"><i class="text-icon glyphicon glyphicon-plus"></i>Add Use</li>
-                    <li ng-repeat="use in survey.pond.landUse5m"><i class="text-icon glyphicon glyphicon-minus" ng-click="survey.pond.landUse5m.splice($index, 1)"></i>{{use}}</li>
-                </ol></td></tr>
-        <tr><td>Land Use 100m</td><td><ol>
-                    <li ng-click="addUsage(100)"><i class="text-icon glyphicon glyphicon-plus"></i>Add Use</li>
-                    <li ng-repeat="use in survey.pond.landUse100m"><i class="text-icon glyphicon glyphicon-minus" ng-click="survey.pond.landUse100m.splice($index, 1)"></i>{{use}}</li>
-                </ol></td></tr>
-        <tr><td>Land Use 1km</td><td><ol>
-                    <li ng-click="addUsage(1000)"><i class="text-icon glyphicon glyphicon-plus"></i>Add Use</li>
-                    <li ng-repeat="use in survey.pond.landUse1km"><i class="text-icon glyphicon glyphicon-minus" ng-click="survey.pond.landUse1km.splice($index, 1)"></i>{{use}}</li>
-                </ol></td></tr>
+<accordion close-others="false">
+    <accordion-group is-open="open.site">
+        <accordion-heading>
+            <span ng-click="getPosition()">Site<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': open.site, 'glyphicon-chevron-right': !open.site}"></i></span>
+        </accordion-heading>
+        <table class="table table-striped">
+            <tr>
+                <th colspan="2">
+                    Site Data
+                </th>
+            </tr>
+            <tr><td>Site Name</td><td><input type="text" ng-model="survey.site.name"></td></tr>
+            <tr><td>Site Code</td><td><input type="text" ng-model="survey.site.code"></td></tr>
+            <tr ng-if="supportsGeo"><td>Site Location <i class="glyphicon glyphicon-refresh" ng-click="getPosition()"></i></td><td>Latitude: {{survey.site.location.latitude| number : 4}}, Longitude: {{survey.site.location.longitude| number : 4}}</td></tr>
+            <tr ng-if="supportsGeo">
+                <td colspan="2">
+                    <div style="padding-bottom: 55%;float:left;position: relative;width: 100%; height:0">
+                        <div ui-map="mapModel.map" class="map" ui-options="mapOptions">
+                        </div>
+                        <div ng-repeat="marker in mapMarkers" ui-map-marker="mapMarkers[$index]">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </accordion-group>
+    <accordion-group is-open="open.pond">
+        <accordion-heading>
+            Pond<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': open.pond, 'glyphicon-chevron-right': !open.pond}"></i>
+        </accordion-heading>
+        <table class="table table-striped">
+            <tr>
+                <th colspan="2">
+                    Pond Data
+                </th>
+            </tr>
+            <tr><td>Pond Code</td><td><input type="text" ng-model="survey.pond.code"></td></tr>
+            <tr><td>Description</td><td><textarea rows="5" maxlength="255" ng-model="survey.pond.description"></textarea></td></tr>
+            <tr><td>Size</td>
+                <td>
+                    <input type="number" pattern="[0-9]*\." step="0.1" placeholder="width" ng-model="survey.pond.width">
+                    <label style="margin-right: 1em">x</label>
+                    <input type="number" pattern="[0-9]*\." placeholder="length" ng-model="survey.pond.length">
+                    <label>meters</label>
+                </td></tr>
+            <tr><td>Marginal Complexity</td><td><input type="number" placeholder="%" pattern="[0-9]*\." min="0" max="100" ng-model="survey.pond.marginalComplexity"></td></tr>
+            <tr><td>Has In/Out Flows</td><td><input type="checkbox" ng-model="survey.pond.hasInOutFlows"></td></tr>
+            <tr><td>Land Use 5m</td><td><ol>
+                        <li ng-click="addUsage(5)"><i class="text-icon glyphicon glyphicon-plus" ></i>Add Use</li>
+                        <li ng-repeat="use in survey.pond.landUse5m"><i class="text-icon glyphicon glyphicon-minus" ng-click="survey.pond.landUse5m.splice($index, 1)"></i>{{use}}</li>
+                    </ol></td></tr>
+            <tr><td>Land Use 100m</td><td><ol>
+                        <li ng-click="addUsage(100)"><i class="text-icon glyphicon glyphicon-plus"></i>Add Use</li>
+                        <li ng-repeat="use in survey.pond.landUse100m"><i class="text-icon glyphicon glyphicon-minus" ng-click="survey.pond.landUse100m.splice($index, 1)"></i>{{use}}</li>
+                    </ol></td></tr>
+            <tr><td>Land Use 1km</td><td><ol>
+                        <li ng-click="addUsage(1000)"><i class="text-icon glyphicon glyphicon-plus"></i>Add Use</li>
+                        <li ng-repeat="use in survey.pond.landUse1km"><i class="text-icon glyphicon glyphicon-minus" ng-click="survey.pond.landUse1km.splice($index, 1)"></i>{{use}}</li>
+                    </ol></td></tr>
+            <tr><td colspan="2"><b>Location</b></td></tr>
+            <tr><td colspan="2">
+                    <table class="table table-condensed">
+                        <tr><th>Area</th><th>Easting</th><th>Northing</th><th></th></tr>
+                        <tr ng-repeat="coordinate in survey.pond.coordinates">
+                            <td>{{coordinate.area}}</td>
+                            <td>{{coordinate.easting}}</td>
+                            <td>{{coordinate.northing}}</td>
+                            <td><i class="glyphicon glyphicon-minus" ng-click="survey.pond.coordinates.splice($index, 1)"></i></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" maxlength="2" style="width: 10%; min-width: 2em" ng-model="area"></td>
+                            <td><input type="number" style="width: 90%" pattern="[0-9]*" max="99999" ng-model="easting"></td>
+                            <td><input type="number" style="width: 90%" pattern="[0-9]*" max="99999" ng-model="northing"></td>
+                            <td><button class="btn btn-sm btn-primary" style="width: 80%" ng-class="{disabled: !area || !easting || !northing}" ng-click="addNewPondCoordinate(area, easting, northing);
+                                area = undefined;
+                                easting = undefined;
+                                northing = undefined">Add</button></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </accordion-group>
+    <accordion-group is-open="open.vegitation">
+        <accordion-heading>
+            Vegitation<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': open.vegitation, 'glyphicon-chevron-right': !open.vegitation}"></i>
+        </accordion-heading>
+        <table class="table table-striped">
+            <tr>
+                <th colspan="2">Vegetation</th>
+            </tr>
+            <tr><td>Surveyor</td><td><input type="text" ng-model="survey.vegetation.surveyor" placeholder="Name of Vegetation Surveyor"></td></tr>
+            <tr><td>Filamentious Algae</td><td><input type="number" pattern="[0-9]*\." ng-model="survey.vegetation.filamentiousAlgae" placeholder="%"></td></tr>
+            <tr><td>Submerged Vegetation</td><td><input type="number" pattern="[0-9]*\." ng-model="survey.vegetation.submerged" placeholder="%"></td></tr>
+            <tr><td>Floating Vegetation</td><td><input type="number" pattern="[0-9]*\." ng-model="survey.vegetation.floating" placeholder="%"></td></tr>
+            <tr><td>Emergent Vegetation</td><td><input type="number" pattern="[0-9]*\." ng-model="survey.vegetation.emergent" placeholder="%"></td></tr>
+            <tr><td>Water Area</td><td><input type="number" pattern="[0-9]*\." ng-model="survey.vegetation.waterArea" placeholder="%"></td></tr>
+            <tr><td>Bryophytes</td><td><input type="number" pattern="[0-9]*\." ng-model="survey.vegetation.bryophytes" placeholder="%"></td></tr>
+            <tr><td>Bare Ground</td><td><input type="number" pattern="[0-9]*\." ng-model="survey.vegetation.bareGround" placeholder="%"></td></tr>
+        </table>
+    </accordion-group>
 
-    </table>
-    
-    <table class="table table-striped">
-        <tr>
-            <th colspan="2">Vegetation</th>
-        </tr>
-        <tr><td>Surveyor</td><td><input type="text" ng-model="survey.vegetation.surveyor" placeholder="Name of Vegetation Surveyor"></td></tr>
-        <tr><td>Filamentious Algae</td><td><input type="number" ng-model="survey.vegetation.filamentiousAlgae" placeholder="%"></td></tr>
-        <tr><td>Submerged Vegetation</td><td><input type="number" ng-model="survey.vegetation.submerged" placeholder="%"></td></tr>
-        <tr><td>Floating Vegetation</td><td><input type="number" ng-model="survey.vegetation.floating" placeholder="%"></td></tr>
-        <tr><td>Emergent Vegetation</td><td><input type="number" ng-model="survey.vegetation.emergent" placeholder="%"></td></tr>
-        <tr><td>Water Area</td><td><input type="number" ng-model="survey.vegetation.waterArea" placeholder="%"></td></tr>
-        <tr><td>Bryophytes</td><td><input type="number" ng-model="survey.vegetation.bryophytes" placeholder="%"></td></tr>
-        <tr><td>Bare Ground</td><td><input type="number" ng-model="survey.vegetation.bareGround" placeholder="%"></td></tr>
-    </table>
-    <table class="table table-condensed">
-        <tr>
-            <td>Take Photo</td>
-            <td><input type="file" accept="image/*" capture="camera"></td>
-        </tr>
-    </table>
+    <accordion-group is-open="open.overhang">
+        <accordion-heading>
+            Overhang<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': open.overhang, 'glyphicon-chevron-right': !open.overhang}"></i>
+        </accordion-heading>                    <table class="table table-striped">
+            <tr>
+                <th colspan="2">Overhang</th>
+            </tr>
+            <tr><td>Pond Area Overhung</td><td><input type="number" ng-model="survey.overhang.pondArea" placeholder="%"></td></tr>
+            <tr><td>Pond Margin Overhung</td><td><input type="number" ng-model="survey.overhang.pondMargin" placeholder="%"></td></tr>
+            <tr><td>Water Area Overhung</td><td><input type="number" ng-model="survey.overhang.waterArea" placeholder="%"></td></tr>
+            <tr><td>Water Margin Overhung</td><td><input type="number" ng-model="survey.overhang.waterMargin" placeholder="%"></td></tr>
+        </table>
+    </accordion-group>
 
-    <div>
-        <button class="pull-right btn btn-primary" style="width: 25%; min-width: 11em" ng-click="save();
-                    hideSurveyPicker = false">Save</button>
-    </div>
-</div>
+</accordion>
+
+
+<table class="table table-condensed">
+    <tr>
+        <td>Take Photo</td>
+        <td><input type="file" accept="image/*" capture="camera"></td>
+    </tr>
+</table>
+<div>

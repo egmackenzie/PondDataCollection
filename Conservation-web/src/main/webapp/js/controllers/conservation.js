@@ -2,7 +2,9 @@
 conservationModule = angular.module('Conservation', [
     'ui.bootstrap',
     'ngRoute',
-    'ngResource']);
+    'ngResource',
+    'ui.map',
+    'ui.event']);
 
 
 conservationModule.config(function($routeProvider) {
